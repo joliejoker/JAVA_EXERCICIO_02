@@ -5,6 +5,7 @@ import br.aeso.exercicio_01.endereco.Endereco;
 import br.aeso.exercicio_01.fornecedor.ControladorFornecedor;
 import br.aeso.exercicio_01.fornecedor.Fornecedor;
 import br.aeso.exercicio_01.util.CPFInvalidoException;
+import br.aeso.exercicio_01.util.CampoObrigatorioInvalidoException;
 import br.aeso.exercicio_01.util.FornecedorInvalidoException;
 import br.aeso.exercicio_01.util.FornecedorJaCadastradoException;
 
@@ -50,7 +51,8 @@ public class Fachada {
 	}
 	
 	
-	public void atualizarForn(String cpf){
+	public void atualizarForn(String cpf) throws CPFInvalidoException, 
+												 CampoObrigatorioInvalidoException{
 		this.controladorFornecedor.atualizarForn(cpf);
 	}
 	public void atualizarEnd(Fornecedor fornecedor){
@@ -58,7 +60,7 @@ public class Fachada {
 	}
 	
 	
-	public void removerForn(String cpf){
+	public void removerForn(String cpf) throws CPFInvalidoException{
 		this.controladorFornecedor.removerForn(cpf);
 	}
 	public void removerEnd(Fornecedor fornecedor){
@@ -66,7 +68,7 @@ public class Fachada {
 	}
 	
 	
-	public ArrayList<Fornecedor> listarForn(){
+	public ArrayList<Fornecedor> listarForn() throws CPFInvalidoException{
 		return this.controladorFornecedor.listarForn();
 	}
 	public ArrayList<Endereco> listarEnd(){

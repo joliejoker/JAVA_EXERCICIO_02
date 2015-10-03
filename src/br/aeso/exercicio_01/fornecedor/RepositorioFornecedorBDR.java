@@ -1,7 +1,6 @@
 package br.aeso.exercicio_01.fornecedor;
 import java.sql.*;
 import java.util.ArrayList;
-import br.aeso.execicio_01.generico.IRepositorioArrayList;
 import br.aeso.exercicio_01.util.FornecedorJaCadastradoException;
 
 
@@ -15,7 +14,7 @@ public class RepositorioFornecedorBDR implements IRepositorioFornecedor{
 	
 	public RepositorioFornecedorBDR() {
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/juliana", "root", "root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/projeto", "root", "root");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
