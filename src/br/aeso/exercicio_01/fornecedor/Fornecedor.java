@@ -4,17 +4,16 @@ import br.aeso.exercicio_01.endereco.Endereco;
 
 public class Fornecedor {
 
-	private Integer codigo;
+	private int codigo;
 	private String nome;
 	private String cpf;
-	private String banco;
+	private String cnpj;
 	private Endereco endereco;
 	
-	public Fornecedor(Integer codigo, String nome, String cpf, String banco){
-		this.codigo = codigo;
+	public Fornecedor(String nome, String cpf, String cnpj){
 		this.nome = nome;
 		this.cpf = cpf;
-		this.banco = banco;
+		this.cnpj = cnpj;
 	}
 
 
@@ -22,7 +21,7 @@ public class Fornecedor {
 		return codigo;
 	}
 
-	public void setCodigo(Integer codigo) {
+	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
 
@@ -39,15 +38,15 @@ public class Fornecedor {
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = cpf.replaceAll("\\.|\\-|\\ ", "");
+		this.cpf = cpf;//replaceAll("\\.|\\-|\\ ", "");
 	}
 
-	public String getBanco() {
-		return banco;
+	public String getCnpj() {
+		return cnpj;
 	}
 
-	public void setBanco(String banco) {
-		this.banco = banco;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 
 	public Endereco getEndereco() {
@@ -58,16 +57,18 @@ public class Fornecedor {
 		this.endereco = endereco;
 	}
 	
+	/*
 	public String formatarCpf() {
 		return cpf.substring(0, 3) + '.' + cpf.substring(3, 6) + '.' + 
 			   cpf.substring(6, 9)+ '-' + cpf.substring(9, 11)
 				;
 	}
+	*/
 
 	@Override
 	public String toString() {
-		return "Fornecedor [codigo=" + codigo + ", nome=" + nome + ", cpf="
-				+ cpf + ", banco=" + banco + "]";
+		return "Fornecedor" +"/n" + "codigo=" + codigo + ", cpf=" + cpf + ", cnpj="
+				+ cnpj + ", nome=" + nome;
 	}
 	
 	

@@ -12,7 +12,7 @@ public class ControladorEndereco {
 	
 	public ControladorEndereco() {
 		// TODO Auto-generated constructor stub
-		controladorEndereco = new ControladorEndereco();
+		//controladorEndereco = new ControladorEndereco();
 		repositorioEndereco = new RepositorioEnderecoBDR();
 	}
 	

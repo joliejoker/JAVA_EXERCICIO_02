@@ -8,8 +8,9 @@ public interface IRepositorioFornecedor {
 	
 	public void cadastrarForn(Fornecedor fornecedor) throws FornecedorJaCadastradoException;
 	public Fornecedor procurarForn(String cpf);
-	public void atualizarForn(String cpf);
-	public void removerForn(Integer codigo);
+	public void atualizarForn(Fornecedor fornecedor);
+	public void removerForn(String cpf);
 	public ArrayList<Fornecedor> listarForn();
+	public void fecharConexaoJDBC();
 	
 }

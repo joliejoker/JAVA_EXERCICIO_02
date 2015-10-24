@@ -23,32 +23,35 @@ public class ControladorFornecedor {
 	public void cadastrarForn(Fornecedor fornecedor) throws FornecedorInvalidoException,
 															CPFInvalidoException, 
 															FornecedorJaCadastradoException{
-		//controladorFornecedor.cadastrarForn(fornecedor);
-		//if(fornecedor.equals(fornecedor.getCpf())) throw new FornecedorJaCadastradoException();
+		Fornecedor fornecedor2;
+		fornecedor2 = repositorioFornecedorBDR.procurarForn(fornecedor.getCpf());
+		String cpf = fornecedor2.getCpf();
+		if(fornecedor.getCpf().equals(cpf)) throw new FornecedorJaCadastradoException();
+		//if(fornecedor2 != null) throw new FornecedorJaCadastradoException();
+		if(!ValidarCPF.validaCPF(fornecedor.getCpf())) throw new CPFInvalidoException(fornecedor.getCpf());
 		if(fornecedor == null) throw new FornecedorInvalidoException();
-		if(!ValidarCPF.validaCPF(fornecedor.getCpf())) throw new CPFInvalidoException(fornecedor.getCpf());
 		else{
-		this.repositorioFornecedorBDR.cadastrarForn(fornecedor);
+		repositorioFornecedorBDR.cadastrarForn(fornecedor);
 		}
 		
 	}
 	
-	public Fornecedor procurarForn(String cpf) throws CPFInvalidoException{
-		Fornecedor fornecedor = null;		
+	public Fornecedor procurarForn(String cpf) throws CPFInvalidoException{	
+		//Fornecedor fornecedor = null;
+		
 		if(!ValidarCPF.validaCPF(cpf)) throw new CPFInvalidoException(cpf);
-		else{
-			return controladorFornecedor.procurarForn(cpf);
-		}
+		
+			return repositorioFornecedorBDR.procurarForn(cpf);
+		
 		
 	}
 	
-	public void atualizarForn(String cpf) throws CPFInvalidoException, 
-												 CampoObrigatorioInvalidoException{
-		Fornecedor fornecedor = null;
+	public void atualizarForn(Fornecedor fornecedor) throws CPFInvalidoException, CampoObrigatorioInvalidoException{
+		
 		if(!ValidarCPF.validaCPF(fornecedor.getCpf())) throw new CPFInvalidoException(fornecedor.getCpf());
-		else if(fornecedor.getNome() == "") throw new CampoObrigatorioInvalidoException();
+		if(fornecedor.getNome() == "") throw new CampoObrigatorioInvalidoException();
 		else{
-		controladorFornecedor.atualizarForn(cpf);
+		repositorioFornecedorBDR.atualizarForn(fornecedor);
 		}		
 	}
 	
@@ -56,20 +59,25 @@ public class ControladorFornecedor {
 		
 		if(!ValidarCPF.validaCPF(cpf)) throw new CPFInvalidoException(cpf);
 		else{
-		controladorFornecedor.removerForn(cpf);
+		repositorioFornecedorBDR.removerForn(cpf);
 		}		
 	}
 	
 	public ArrayList<Fornecedor> listarForn() throws CPFInvalidoException{
 		ArrayList<Fornecedor> fornecedores = null;
 		
-		fornecedores  = this.controladorFornecedor.listarForn();
+		fornecedores  = this.repositorioFornecedorBDR.listarForn();
+		/*
 		for (Fornecedor fornecedor : fornecedores) {
 			try {
 				fornecedor = controladorFornecedor.procurarForn(fornecedor.getCpf());
 			} catch (CPFInvalidoException e) {}
 		}
+		*/
 		return fornecedores;
 	}
 
+	public void fecharConexaoJDBC(){
+		repositorioFornecedorBDR.fecharConexaoJDBC();
+	}
 }

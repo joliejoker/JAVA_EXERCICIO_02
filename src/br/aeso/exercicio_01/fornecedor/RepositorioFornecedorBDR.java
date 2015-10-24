@@ -9,8 +9,9 @@ import br.aeso.exercicio_01.util.FornecedorJaCadastradoException;
 public class RepositorioFornecedorBDR implements IRepositorioFornecedor{
 	
 	private Fornecedor fornecedor;
-	PreparedStatement preStatement;
 	Connection conn;
+	PreparedStatement preStatement;
+	ResultSet resultSet;
 	
 	public RepositorioFornecedorBDR() {
 		try {
@@ -22,45 +23,44 @@ public class RepositorioFornecedorBDR implements IRepositorioFornecedor{
 
 
 	@Override
-	public void cadastrarForn(Fornecedor fornecedor) throws FornecedorJaCadastradoException {
+	public void cadastrarForn(Fornecedor fornecedor) throws FornecedorJaCadastradoException {         
+		String sql="insert into `projeto`.`fornecedor` (Nome, CPF, cnpj) values (?, ?, ?)";
+		preStatement = null;
+		resultSet = null;
 		try {
-			String sql="insert into fornecedor (codigo, nome, cpf, banco, endereco) values (?, ?, ?, ?, ?)";
-			conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			preStatement.setInt(1, fornecedor.getCodigo());
-			preStatement.setString(2, fornecedor.getNome());
-			preStatement.setString(3, fornecedor.getCpf());
-			preStatement.setString(4, fornecedor.getBanco());
-			preStatement.setObject(5, fornecedor.getEndereco());
+			preStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			preStatement.setString(1, fornecedor.getNome());
+			preStatement.setString(2, fornecedor.getCpf());
+			preStatement.setString(3, fornecedor.getCnpj());
 			preStatement.execute();
-			ResultSet resultSet = preStatement.getGeneratedKeys();
-			Integer clienteId = 0;
+			resultSet = preStatement.getGeneratedKeys();
+			Integer fornId = 0;
 			while(resultSet.next()){
-				clienteId = resultSet.getInt(1);
+				fornId = resultSet.getInt(1);
 			}
-			System.out.println("ID do Insert no Banco " + clienteId);	
+			System.out.println("ID do Insert no Banco " + fornId);	
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}		
 	}
 
 	@Override
 	public Fornecedor procurarForn(String cpf) {
-			try {
-				String sql ="select * from cliente where cliente_id = ?";
+		Fornecedor fornecedor = new Fornecedor(null, null, null);	
+		try {
+				String sql ="select * from `projeto`.`fornecedor` where cpf = ?";
 				preStatement = conn.prepareStatement(sql);
-				preStatement.setString(1, fornecedor.getCpf());
+				preStatement.setString(1, cpf);
 				ResultSet resultSet = preStatement.executeQuery();
-				
-				System.out.println("Imprimindo dados do banco:");
-				System.out.println("ID\tID\tNome\t\tCPF");
+
 				while(resultSet.next()){
-					System.out.println(resultSet.getString(1) + "\t");
-					System.out.println(resultSet.getString("cliente_id") + "\t");
-					System.out.println(resultSet.getString("nome") + "\t");
-					System.out.println(resultSet.getString("cpf") + "\t");
+					fornecedor.setCodigo(resultSet.getInt(1));
+					fornecedor.setCpf(resultSet.getString(2));
+					fornecedor.setCnpj(resultSet.getString(3));;
+					fornecedor.setNome(resultSet.getString(4));
 				}
-				
+				return fornecedor;
 			} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,14 +69,16 @@ public class RepositorioFornecedorBDR implements IRepositorioFornecedor{
 	}
 
 	
-	public void atualizarForn(String cpf) {
+	public void atualizarForn(Fornecedor fornecedor) {
 		try {
-			String sql="update cliente set nome = ? where cliente_id = ?";
+			String sql="update `projeto`.`fornecedor` set nome = ?, cnpj= ? where cpf = ?";
 			preStatement = conn.prepareStatement(sql);
 			preStatement.setString(1, fornecedor.getNome());
-			preStatement.setInt(2, fornecedor.getCodigo());
-			
+			preStatement.setString(2, fornecedor.getCnpj());
+			preStatement.setString(3, fornecedor.getCpf());	
 			preStatement.executeUpdate();
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -84,11 +86,11 @@ public class RepositorioFornecedorBDR implements IRepositorioFornecedor{
 	}
 
 	@Override
-	public void removerForn(Integer codigo) {
+	public void removerForn(String cpf) {
 		try {
-			String sql = "delete from cliente where cliente_id = ?";
+			String sql = "delete from `projeto`.`fornecedor` where cpf = ?";
 			preStatement = conn.prepareStatement(sql);
-			preStatement.setInt(1, fornecedor.getCodigo());
+			preStatement.setString(1, fornecedor.getCpf());
 			
 			preStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -99,8 +101,35 @@ public class RepositorioFornecedorBDR implements IRepositorioFornecedor{
 
 	@Override
 	public ArrayList<Fornecedor> listarForn() {
-		// TODO Auto-generated method stub
+		try {
+			String sql = "Select * from `projeto`.fornecedor;";
+			preStatement = conn.prepareStatement(sql);
+			ResultSet resultSet = preStatement.executeQuery();
+			while(resultSet.next()){
+				System.out.println(resultSet.getInt(1));
+				System.out.println(resultSet.getString(2));
+				System.out.println(resultSet.getString(3));
+				System.out.println(resultSet.getString(4));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return null;
+	}
+	
+	
+	public void fecharConexaoJDBC(){
+		try {
+			conn.close();
+			preStatement.close();
+			resultSet.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	

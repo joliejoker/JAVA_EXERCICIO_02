@@ -14,7 +14,7 @@ public class RepositorioEnderecoBDR implements IRepositorioEndereco{
 	public RepositorioEnderecoBDR() {
 		// TODO Auto-generated constructor stub
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/juliana", "root", "root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/projeto", "root", "root");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

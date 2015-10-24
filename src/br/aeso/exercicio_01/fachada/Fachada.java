@@ -18,7 +18,7 @@ public class Fachada {
 	public static Fachada instance;
 	
 	
-	private Fachada(){
+	public Fachada(){
 		controladorFornecedor = new ControladorFornecedor();
 		controladorEndereco = new ControladorEndereco();
 		
@@ -51,9 +51,9 @@ public class Fachada {
 	}
 	
 	
-	public void atualizarForn(String cpf) throws CPFInvalidoException, 
+	public void atualizarForn(Fornecedor fornecedor) throws CPFInvalidoException, 
 												 CampoObrigatorioInvalidoException{
-		this.controladorFornecedor.atualizarForn(cpf);
+		this.controladorFornecedor.atualizarForn(fornecedor);
 	}
 	public void atualizarEnd(Fornecedor fornecedor){
 		this.controladorEndereco.atualizarEnd(fornecedor);
@@ -73,5 +73,9 @@ public class Fachada {
 	}
 	public ArrayList<Endereco> listarEnd(){
 		return this.controladorEndereco.listarEnd();
+	}
+	
+	public void fecharConexaoJDBC(){
+		this.controladorFornecedor.fecharConexaoJDBC();
 	}
 }
